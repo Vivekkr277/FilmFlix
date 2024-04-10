@@ -8,7 +8,7 @@ import { styles , theme} from '../theme';
 import { LinearGradient } from 'expo-linear-gradient';
 import Cast from '../components/Cast';
 import MovieList from '../components/MovieList';
-import Loading from '../components/loading';
+import Loading from '../components/Loading';
 
 const {width, height} = Dimensions.get('window');
 const ios = Platform.OS == 'ios';

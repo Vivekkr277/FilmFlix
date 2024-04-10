@@ -5,7 +5,7 @@ import { styles } from '../theme'
 import { useNavigation } from '@react-navigation/native'
 import { ChevronLeftIcon, HeartIcon } from 'react-native-heroicons/solid'
 import MovieList from '../components/MovieList'
-import Loading from '../components/loading'
+import Loading from '../components/Loading'
 
 const ios = Platform.OS == 'ios'
 const verticalMargin = ios? "": 'my-3'

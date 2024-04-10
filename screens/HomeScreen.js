@@ -7,7 +7,7 @@ import {styles} from '../theme/'
 import TrendingMovies from '../components/TrendingMovies'
 import MovieList from '../components/MovieList'
 import { useNavigation } from '@react-navigation/native'
-import Loading from '../components/loading'
+import Loading from '../components/Loading'
 
 const ios = Platform.OS == 'ios';
 

@@ -9,6 +9,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Cast from '../components/Cast';
 import MovieList from '../components/MovieList';
 import Loading from '../components/Loading';
+import { fallBackMoviePoster, fetchMovieCredits, fetchMoviesDetails, fetchSimilarMovies, image500 } from '../api/moviedb';
 
 const {width, height} = Dimensions.get('window');
 const ios = Platform.OS == 'ios';
@@ -20,13 +21,39 @@ export default function MovieScreen() {
     const navigation = useNavigation();
     const [isFavourite, toogleFavourite] = useState(false);
     let movieName = 'Avengers and the whole world';
-    const [cast, setCast] = useState([1,2,3,4,5]);
-    const [similarMovies, setSimilarMovies] = useState([1,2,3,4,5]);
+    const [cast, setCast] = useState([]);
+    const [similarMovies, setSimilarMovies] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [movie, setMovie] = useState({});
 
     useEffect(() => {
         // api call
+        console.log('item id: ',item.id);
+        setLoading(true);
+        getMovieDetails(item.id);
+        getMovieCredits(item.id);
+        getSimilarMovies(item.id);
     }, [item])
+
+     const getMovieDetails = async id=> {
+        const data = await fetchMoviesDetails(id);
+        // console.log('movie details: ',data);
+         if(data) setMovie(data);
+        setLoading(false);
+     }
+
+     const getMovieCredits= async id=>{
+        const data = await fetchMovieCredits(id);
+        // console.log('got movie credits: ',data);
+        if(data && data.cast) setCast(data.cast);
+        setLoading(false);
+     }
+
+     const getSimilarMovies = async id=>{
+        const data = await fetchSimilarMovies(id);
+        // console.log('got similar ',data);
+        if(data && data.results) setSimilarMovies(data.results);
+     }
   return (
       <ScrollView
        contentContainerStyle={{paddingBottom: 20}}
@@ -51,7 +78,8 @@ export default function MovieScreen() {
                 ) : (
                     <View>
                         <Image
-                        source={require('../assets/avengers4.png')} 
+                        // source={require('../assets/avengers4.png')} 
+                        source={{uri: image500(movie?.poster_path) || fallBackMoviePoster}}
                         style={{width : width, height: height*0.55}}
                         />
                         <LinearGradient
@@ -71,16 +99,32 @@ export default function MovieScreen() {
         <View style={{marginTop:-( height*0.09)}} className="space-y-3">
             {/* title */}
             <Text className="text-center text-white font-bold text-3xl tracking-wider">
-                {movieName}
+                {     movie?.title     }
             </Text>
             {/* status release runtime */}
-            <Text className="text-neutral-400 font-semibold text-center text-base">
-                Released • 2020 • 170min
-            </Text>
+
+            {
+                movie?.id?(
+                    <Text className="text-neutral-400 font-semibold text-center text-base">
+                    {movie?.status}  {movie?.release_data?.split('-')[0]} • {movie?.runtime}
+                     </Text>
+                ):null
+            }
+           
 
             {/* genres */}
              <View className="flex-row justify-center mx-4 space-x-2">
-                <Text className="text-neutral-400 font-semibold text-center text-base" >
+                {
+                    movie?.genres?.map((genre, index) => {
+                         let showDot = index+1 != movie.genres.length;
+                        return (
+                            <Text key={index} className="text-neutral-400 font-semibold text-center text-base" >
+                              {genre?.name} {showDot?"•":null}
+                            </Text>
+                        )
+                    })
+                }
+                {/* <Text className="text-neutral-400 font-semibold text-center text-base" >
                     Action •
                 </Text>
                 <Text className="text-neutral-400 font-semibold text-center text-base" >
@@ -88,12 +132,14 @@ export default function MovieScreen() {
                 </Text>
                 <Text className="text-neutral-400 font-semibold text-center text-base" >
                     Comedy 
-                </Text>
+                </Text> */}
              </View>
              {/* description */}
                 <Text className="text-neutral-400 mx-4 tracking-wider">
-                 Before even starting to tell your story, it is always important to begin with a premise. This will set your readers’ expectations and allow them to better picture out the story you’re about to tell. Log lines should only contain one to two sentences as possible with a hint of irony if at all possible.
-                </Text>
+                {
+                     movie?.overview
+                }               
+             </Text>
         </View>
         {/* cast */}
         <Cast  navigation={navigation} cast={cast}/>

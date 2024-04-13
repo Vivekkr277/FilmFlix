@@ -37,21 +37,18 @@ export default function MovieScreen() {
 
      const getMovieDetails = async id=> {
         const data = await fetchMoviesDetails(id);
-        // console.log('movie details: ',data);
          if(data) setMovie(data);
         setLoading(false);
      }
 
      const getMovieCredits= async id=>{
         const data = await fetchMovieCredits(id);
-        // console.log('got movie credits: ',data);
         if(data && data.cast) setCast(data.cast);
         setLoading(false);
      }
 
      const getSimilarMovies = async id=>{
         const data = await fetchSimilarMovies(id);
-        // console.log('got similar ',data);
         if(data && data.results) setSimilarMovies(data.results);
      }
   return (
@@ -78,7 +75,6 @@ export default function MovieScreen() {
                 ) : (
                     <View>
                         <Image
-                        // source={require('../assets/avengers4.png')} 
                         source={{uri: image500(movie?.poster_path) || fallBackMoviePoster}}
                         style={{width : width, height: height*0.55}}
                         />
@@ -106,7 +102,7 @@ export default function MovieScreen() {
             {
                 movie?.id?(
                     <Text className="text-neutral-400 font-semibold text-center text-base">
-                    {movie?.status}  {movie?.release_data?.split('-')[0]} • {movie?.runtime}
+                    {movie?.status} • {movie?.release_date?.split('-')[0]} • {movie?.runtime} min
                      </Text>
                 ):null
             }
@@ -124,15 +120,7 @@ export default function MovieScreen() {
                         )
                     })
                 }
-                {/* <Text className="text-neutral-400 font-semibold text-center text-base" >
-                    Action •
-                </Text>
-                <Text className="text-neutral-400 font-semibold text-center text-base" >
-                    Thrill •
-                </Text>
-                <Text className="text-neutral-400 font-semibold text-center text-base" >
-                    Comedy 
-                </Text> */}
+               
              </View>
              {/* description */}
                 <Text className="text-neutral-400 mx-4 tracking-wider">
@@ -142,9 +130,9 @@ export default function MovieScreen() {
              </Text>
         </View>
         {/* cast */}
-        <Cast  navigation={navigation} cast={cast}/>
+       { cast.length>0 && <Cast  navigation={navigation} cast={cast}/>}
         {/* similar movies */}
-        <MovieList title='Similar Movies' hideSeeAll={true} data={similarMovies}/>
+       { similarMovies.length>0 && <MovieList title='Similar Movies' hideSeeAll={true} data={similarMovies}/>}
       </ScrollView>
   )
 }

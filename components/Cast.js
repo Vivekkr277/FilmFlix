@@ -24,7 +24,6 @@ export default function Cast({cast, navigation}) {
                     >
                         <View className="rounded-full h-20 w-20 border border-neutral-500 overflow-hidden items-center">
                             <Image
-                            //  source={require('../assets/avengers5.png')}
                             source={{uri: image185(person?.profile_path) || fallBackPersonImage}}
                              className="h-24 w-20 rounded-2xl"
                              />

@@ -11,9 +11,7 @@ export default function MovieList({title, data, hideSeeAll}) {
     let movieName = 'Avengers and the whole world';
     const navigation = useNavigation();
 
-    // console.log(title);
-    // console.log(data);
-
+   
   return (
     <View className="mb-8 space-y-4">
        <View className="mx-4 flex-row justify-between items-center">
@@ -43,7 +41,6 @@ export default function MovieList({title, data, hideSeeAll}) {
                     >
                         <View className="space-y-1 mr-4">
                             <Image 
-                            // source={require('../assets/avengers3.png')}
                             source={{uri: image185(item.poster_path) || fallBackMoviePoster}}
                              style={{width: width*0.33, height: height*0.22}}
                              className="rounded-3xl"

@@ -29,7 +29,6 @@ export default function HomeScreen() {
 
    const getTrendingMovies= async () => {
     const data = await fetchTrendingMovies();
-    // console.log('trending movie data : ', data);
     
       if(data && data.results)   setTrending(data.results);
       setLoading(false);
@@ -46,7 +45,6 @@ export default function HomeScreen() {
 
   const getTopRatedMovies  = async () => {
     const data = await fetchTopRatedMovies();
-    // console.log('got toprated movies : ', data);
 
     if(data && data.results)  setTopRated(data.results);
   }
